@@ -58,6 +58,8 @@ async function handleRequest(request) {
                 return getKeys()
             }
             break
+        default:
+            return getKeys()
     }
 
 }
