@@ -2,19 +2,20 @@ const config = {
     bangumi_id: 39947
 }
 
-async function getKeys() {
-    const keys = await KV.list()
+async function getKeys(cursor = undefined) {
+    const keys = await KV.list({ cursor: cursor })
     return new Response(JSON.stringify(keys));
 }
 
-async function getValues() {
-    const keys = await KV.list()
+async function getValues(cursor = undefined) {
+    const keys = await KV.list({ cursor: cursor })
     var r = {}
     for (let index = 0; index < keys.keys.length; index++) {
         const element = keys.keys[index]['name'];
         r[element] = JSON.parse(await KV.get(element))
 
     }
+    r['cursor'] = keys.cursor
     return new Response(JSON.stringify(r));
 }
 
@@ -52,10 +53,10 @@ async function handleRequest(request) {
             break
         case 'get':
             if (path[2] == 'values') {
-                return getValues()
+                return getValues(params['cursor'])
             }
             else {
-                return getKeys()
+                return getKeys(params['cursor'])
             }
             break
         default:
