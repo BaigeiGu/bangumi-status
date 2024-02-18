@@ -19,19 +19,6 @@ async function getValues(cursor = undefined) {
   return new Response(JSON.stringify(r));
 }
 
-async function read_website_content(url) {
-  console.log("reading website content");
-
-  const response = await fetch(url);
-  const body = await response.json();
-  let cheerioBody = await cheerio.load(body);
-  const resp = {
-    website_body: cheerioBody("p").text(),
-    url: url
-  }
-  return JSON.stringify(resp);
-}
-
 async function update() {
   const response = await fetch(`https://api.bilibili.com/pgc/web/season/stat?season_id=${config.bangumi_id}`)
   const r = await response.json()
